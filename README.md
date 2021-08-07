@@ -1,5 +1,5 @@
 # MineLink 
-简单的 Minecraft BungeeCord 服务器内至外交流方式<br>
+简单的 Minecraft Waterfall 服务器内至外交流方式<br>
 
 ### Wat it can do | 他能做什么
 · 通过本插件同服务器以外的聊天群聊交流！
