@@ -1,0 +1,5 @@
+name: MineLink
+version: @version@
+author: Kyomotoi
+main: moe.kyomotoi.minelink.MineLink
+description: A simple Minecraft server plugin transmit information by http.

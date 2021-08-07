@@ -1,0 +1,22 @@
+http:
+  # Target host and port
+  host: "127.0.0.1"
+  port: "27777"
+  route: "/sendMessage"
+
+server:
+  # Accept port
+  host: "127.0.0.1"
+  port: 27778
+  route: "/acceptMessage"
+
+middleware:
+  access-token: "114514"
+
+commands:
+  manege: "ml"
+  player: "s"
+
+message:
+  prefix: "§8[§cFrom §3"
+  suffix: "§8] §f>> §b"
