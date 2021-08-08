@@ -2,12 +2,20 @@ package moe.kyomotoi.minelink.utils;
 
 import net.md_5.bungee.api.plugin.PluginLogger;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.logging.Logger;
 
 public class ErrorDealer {
+
+    public static String getErrorMessage(Throwable t) {
+        StringWriter sw = new StringWriter();
+        t.printStackTrace(new PrintWriter(sw, true));
+        return sw.getBuffer().toString();
+    }
 
     public static void paste(Exception err) {
         Logger log = PluginLogger.getLogger("MineLink|ErrorDealer");
@@ -27,20 +35,19 @@ public class ErrorDealer {
                 .post(body)
                 .build();
 
-        try {
-            Response response = client.newCall(request).execute();
-            String resURL = response.request().url().toString();
-            log.warning("A error has been coming! Track: " + resURL);
-            response.body().close();
-        } catch (Exception error) {
-            log.warning("Failed to paste ERROR, here is original error info:");
-            error.printStackTrace();
-        }
-    }
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                log.warning("Failed to paste ERROR, here is original error info:");
+                e.printStackTrace();
+            }
 
-    public static String getErrorMessage(Throwable t) {
-        StringWriter sw = new StringWriter();
-        t.printStackTrace(new PrintWriter(sw, true));
-        return sw.getBuffer().toString();
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String resURL = response.request().url().toString();
+                log.warning("A error has been coming! Track: " + resURL);
+                response.body().close();
+            }
+        });
     }
 }

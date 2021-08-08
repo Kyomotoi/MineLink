@@ -2,10 +2,10 @@ package moe.kyomotoi.minelink.client;
 
 import moe.kyomotoi.minelink.utils.ConfigDealer;
 import moe.kyomotoi.minelink.MineLink;
+import moe.kyomotoi.minelink.utils.ErrorDealer;
 import net.md_5.bungee.api.plugin.PluginLogger;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -34,9 +34,18 @@ public class Http {
                 .url(url)
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            log.info("Sending message success! context: " + sender + ":" + message);
-            response.body().close();
-        }
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                log.warning("Failed to request, please check it.");
+                ErrorDealer.paste(e);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                log.info("Sending message success! context: " + sender + ":" + message);
+                response.body().close();
+            }
+        });
     }
 }

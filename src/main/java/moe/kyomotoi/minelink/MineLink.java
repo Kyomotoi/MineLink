@@ -81,7 +81,6 @@ public final class MineLink extends Plugin {
         }
 
         new ConfigDealer(config);
-        getLogger().info("SUCCESS!");
     }
 
     private void registerCommands() {

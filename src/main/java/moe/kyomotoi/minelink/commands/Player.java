@@ -26,34 +26,41 @@ public class Player extends Command {
         boolean isEnabled = MineLink.isEnabledSend;
         if (!isEnabled) {
             sender.sendMessage("§cHTTP(send message) service has been disable.");
+            return;
         }
-
-        String playerName = sender.getName();
 
         if (args.length == 0) {
             PlayerHelper(sender);
+            return;
+        }
 
-        } else if (args[0].equalsIgnoreCase("disable")) {
-            MineLink.disabledPlayer.add(playerName);
-            sender.sendMessage("§aYou will not receive message now.");
+        String playerName = sender.getName();
+        String arg1 = args[0];
 
-        } else if (args[0].equalsIgnoreCase("enabled")) {
-            try {
-                MineLink.disabledPlayer.remove(playerName);
-                sender.sendMessage("§aYou will receive message now.");
-            } catch (Exception err) {
-                sender.sendMessage("§cWARNING! Failed to disable, maybe you does not disable.");
-            }
+        switch (arg1) {
+            case "disable":
+                MineLink.disabledPlayer.add(playerName);
+                sender.sendMessage("§aYou will not receive message now.");
+                break;
 
-        } else {
-            String msg = args[0];
+            case "enabled":
+                try {
+                    MineLink.disabledPlayer.remove(playerName);
+                    sender.sendMessage("§aYou will receive message now.");
+                } catch (Exception err) {
+                    sender.sendMessage("§cWARNING! Failed to disable, maybe you does not disable.");
+                }
+                break;
 
-            try {
-                Http.sendMessage(playerName, msg);
-                sender.sendMessage("§aSend message success!");
-            } catch (Exception err) {
-                sender.sendMessage("§cFailed to send, maybe HTTP(send message) service has been disable.");
-            }
+            default:
+                String msg = args[0];
+
+                try {
+                    Http.sendMessage(playerName, msg);
+                    sender.sendMessage("§aSend message success!");
+                } catch (Exception err) {
+                    sender.sendMessage("§cFailed to send, maybe HTTP(send message) service has been disable.");
+                }
         }
     }
 }
